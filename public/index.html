@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ModLive — Comunidade em tempo real</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="servers">
+    <div class="brand" title="Mod Live"><img class="brand-img" src="/assets/modlive-logo.jpeg" alt="Mod Live Chat"><b>MOD LIVE</b></div>
+    <button class="server active">M</button>
+    <button class="server">+</button>
+  </aside>
+
+  <aside class="sidebar">
+    <div class="server-head"><strong>ModLive</strong><span>⌄</span></div>
+    <div class="search"><input id="room" placeholder="ID da sala" value="modlive-geral"><button id="join">Entrar</button></div>
+    <div class="section"><span>CANAIS DE TEXTO</span><button>+</button></div>
+    <button class="channel active"># geral</button>
+    <button class="channel"># anúncios</button>
+    <div class="section"><span>CANAIS DE VOZ</span><button>+</button></div>
+    <button class="channel voice">🔊 Sala Geral</button>
+    <button class="channel voice">🎮 Gamer</button>
+    <div class="userbox"><div class="avatar">U</div><div><b id="username">Visitante</b><small>online</small></div><button id="settings">⚙</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div><b># geral</b><span> · Comunidade Mod Live</span></div><div class="actions"><button id="voice">🎙</button><button id="video">📹</button><button id="screen">🖥 Compartilhar tela</button></div></header>
+    <section id="stage" class="stage">
+      <div class="welcome"><img class="welcome-logo" src="/assets/modlive-logo.jpeg" alt="Mod Live Chat"><h1>Bem-vindo ao <em>Mod Live</em></h1><p>Converse, faça chamadas e compartilhe sua tela em tempo real.</p></div>
+      <div id="videos" class="videos"></div>
+    </section>
+    <section class="chat"><div id="messages" class="messages"></div><form id="chatForm"><input id="message" autocomplete="off" placeholder="Conversar em #geral"><button>Enviar</button></form></section>
+  </main>
+
+  <aside class="members">
+    <h4>ONLINE — <span id="count">1</span></h4>
+    <div id="memberList"><div class="member"><span class="status"></span><div class="avatar">U</div><div><b>Visitante</b><small>online</small></div></div></div>
+    <div class="features"><h4>MOD LIVE</h4><p>✓ Chat em tempo real</p><p>✓ Voz e vídeo via WebRTC</p><p>✓ Compartilhamento de tela</p><p>✓ Salas e convites</p></div>
+  </aside>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
