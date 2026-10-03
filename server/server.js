@@ -1,60 +1,12 @@
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-const path = require("path");
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: true, credentials: true } });
-
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "..", "public")));
-
-const users = new Map();
-const rooms = new Map();
-
-io.on("connection", socket => {
-  socket.on("join-room", ({ roomId, user }) => {
-    if (!roomId) return;
-    socket.join(roomId);
-    users.set(socket.id, { ...user, socketId: socket.id, roomId });
-    if (!rooms.has(roomId)) rooms.set(roomId, new Set());
-    rooms.get(roomId).add(socket.id);
-
-    const peers = [...rooms.get(roomId)].filter(id => id !== socket.id)
-      .map(id => users.get(id)).filter(Boolean);
-
-    socket.emit("room-users", peers);
-    socket.to(roomId).emit("user-joined", users.get(socket.id));
-  });
-
-  socket.on("signal", ({ to, data }) => {
-    io.to(to).emit("signal", { from: socket.id, data });
-  });
-
-  socket.on("chat-message", ({ roomId, message }) => {
-    const u = users.get(socket.id);
-    if (!u || !roomId || !message) return;
-    io.to(roomId).emit("chat-message", {
-      id: crypto.randomUUID(),
-      message: String(message).slice(0, 4000),
-      author: { id: socket.id, name: u.name || "Usuário" },
-      time: new Date().toISOString()
-    });
-  });
-
-  socket.on("disconnect", () => {
-    const u = users.get(socket.id);
-    if (u?.roomId) {
-      rooms.get(u.roomId)?.delete(socket.id);
-      socket.to(u.roomId).emit("user-left", { socketId: socket.id });
-    }
-    users.delete(socket.id);
-  });
-});
-
-app.get("/api/health", (_, res) => res.json({ ok: true, service: "ModLive" }));
-app.use( (_, res) => res.sendFile(path.join(__dirname, "..", "public", "index.html")));
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`ModLive online na porta ${PORT}`));
+const express=require("express"),http=require("http"),path=require("path"),cookieParser=require("cookie-parser"),jwt=require("jsonwebtoken");
+const {OAuth2Client}=require("google-auth-library"); const {Server}=require("socket.io");
+const app=express(),server=http.createServer(app),io=new Server(server),PORT=process.env.PORT||3000,CLIENT=process.env.GOOGLE_CLIENT_ID||"",SECRET=process.env.JWT_SECRET||"change-me",google=new OAuth2Client(CLIENT);
+app.use(express.json());app.use(cookieParser());app.use(express.static(path.join(__dirname,"..","public")));
+const auth=(q,s,n)=>{try{q.user=jwt.verify(q.cookies.modlive_token,SECRET);n()}catch(e){s.status(401).json({ok:false})}};
+app.get("/api/config",(q,s)=>s.json({clientId:CLIENT}));app.get("/api/me",auth,(q,s)=>s.json({ok:true,user:q.user}));
+app.post("/api/auth/google",async(q,s)=>{try{if(!CLIENT)throw Error("GOOGLE_CLIENT_ID");let t=await google.verifyIdToken({idToken:q.body.credential,audience:CLIENT}),p=t.getPayload(),u={id:p.sub,name:p.name,email:p.email,picture:p.picture};s.cookie("modlive_token",jwt.sign(u,SECRET,{expiresIn:"30d"}),{httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"lax",maxAge:2592000000});s.json({ok:true,user:u})}catch(e){s.status(401).json({ok:false,error:"Configure/valide GOOGLE_CLIENT_ID no Render."})}});
+app.post("/api/logout",(q,s)=>{s.clearCookie("modlive_token");s.json({ok:true})});app.get("*",(q,s)=>s.sendFile(path.join(__dirname,"..","public","index.html")));
+let users=new Map(),rooms=new Map();io.use((x,n)=>{try{let c=x.handshake.headers.cookie||"",m=c.match(/modlive_token=([^;]+)/);x.user=jwt.verify(decodeURIComponent(m[1]),SECRET);n()}catch(e){n(Error("unauthorized"))}});
+const roster=r=>[...(rooms.get(r)||[])].map(i=>users.get(i)).filter(Boolean);
+io.on("connection",x=>{users.set(x.id,{socketId:x.id,...x.user});x.on("join",r=>{if(x.room){rooms.get(x.room)?.delete(x.id);x.leave(x.room)}x.room=r;x.join(r);if(!rooms.has(r))rooms.set(r,new Set);rooms.get(r).add(x.id);io.to(r).emit("roster",roster(r))});x.on("chat",m=>{if(x.room&&String(m).trim())io.to(x.room).emit("chat",{author:x.user.name,picture:x.user.picture,text:String(m).slice(0,4000),time:Date.now()})});x.on("signal",d=>io.to(d.to).emit("signal",{from:x.id,data:d.data}));x.on("disconnect",()=>{rooms.get(x.room)?.delete(x.id);if(x.room)io.to(x.room).emit("roster",roster(x.room));users.delete(x.id)})});
+server.listen(PORT,()=>console.log("ModLive online na porta "+PORT));

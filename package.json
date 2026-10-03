@@ -1,17 +1,14 @@
 {
   "name": "modlive",
-  "version": "1.0.0",
-  "private": true,
-  "description": "ModLive - comunidade, chat, voz, vídeo e compartilhamento de tela em tempo real.",
-  "main": "server/server.js",
+  "version": "2.0.0",
   "scripts": {
     "start": "node server/server.js"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "socket.io": "^4.8.1"
-  },
-  "engines": {
-    "node": ">=18"
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1",
+    "google-auth-library": "^9.15.1",
+    "jsonwebtoken": "^9.0.2",
+    "cookie-parser": "^1.4.7"
   }
 }

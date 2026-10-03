@@ -1,47 +1,6 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ModLive — Comunidade em tempo real</title>
-<link rel="stylesheet" href="/style.css">
-</head>
-<body>
-<div class="app">
-  <aside class="servers">
-    <div class="brand" title="Mod Live"><img class="brand-img" src="/assets/modlive-logo.jpeg" alt="Mod Live Chat"><b>MOD LIVE</b></div>
-    <button class="server active">M</button>
-    <button class="server">+</button>
-  </aside>
-
-  <aside class="sidebar">
-    <div class="server-head"><strong>ModLive</strong><span>⌄</span></div>
-    <div class="search"><input id="room" placeholder="ID da sala" value="modlive-geral"><button id="join">Entrar</button></div>
-    <div class="section"><span>CANAIS DE TEXTO</span><button>+</button></div>
-    <button class="channel active"># geral</button>
-    <button class="channel"># anúncios</button>
-    <div class="section"><span>CANAIS DE VOZ</span><button>+</button></div>
-    <button class="channel voice">🔊 Sala Geral</button>
-    <button class="channel voice">🎮 Gamer</button>
-    <div class="userbox"><div class="avatar">U</div><div><b id="username">Visitante</b><small>online</small></div><button id="settings">⚙</button></div>
-  </aside>
-
-  <main class="main">
-    <header class="topbar"><div><b># geral</b><span> · Comunidade Mod Live</span></div><div class="actions"><button id="voice">🎙</button><button id="video">📹</button><button id="screen">🖥 Compartilhar tela</button></div></header>
-    <section id="stage" class="stage">
-      <div class="welcome"><img class="welcome-logo" src="/assets/modlive-logo.jpeg" alt="Mod Live Chat"><h1>Bem-vindo ao <em>Mod Live</em></h1><p>Converse, faça chamadas e compartilhe sua tela em tempo real.</p></div>
-      <div id="videos" class="videos"></div>
-    </section>
-    <section class="chat"><div id="messages" class="messages"></div><form id="chatForm"><input id="message" autocomplete="off" placeholder="Conversar em #geral"><button>Enviar</button></form></section>
-  </main>
-
-  <aside class="members">
-    <h4>ONLINE — <span id="count">1</span></h4>
-    <div id="memberList"><div class="member"><span class="status"></span><div class="avatar">U</div><div><b>Visitante</b><small>online</small></div></div></div>
-    <div class="features"><h4>MOD LIVE</h4><p>✓ Chat em tempo real</p><p>✓ Voz e vídeo via WebRTC</p><p>✓ Compartilhamento de tela</p><p>✓ Salas e convites</p></div>
-  </aside>
-</div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ModLive</title><link rel="stylesheet" href="/style.css"></head><body>
+<div id="login"><div class="card"><div class="logo">M</div><h1>Bem-vindo ao ModLive</h1><p>Cadastre-se ou entre com sua Conta Google para continuar.</p><div id="gbtn"></div><p id="err"></p><small>Sua senha continua protegida pelo Google.</small></div></div>
+<div id="app" class="hide"><aside class="servers"><b>ML</b><button>M</button><button>+</button></aside><aside class="channels"><header>ModLive⌄</header><h6>CANAIS DE TEXTO ＋</h6><button data-r="geral" class="sel"># geral</button><button data-r="anuncios"># anúncios</button><button data-r="mods"># mods-e-skins</button><h6>CANAIS DE VOZ ＋</h6><button data-r="sala-geral">🔊 Sala Geral</button><button data-r="gamer">🎮 Gamer</button><div class="me"><img id="pic"><span><b id="name"></b><small>online</small></span><button id="out">⚙</button></div></aside>
+<main><header class="top"><b id="title"># geral</b><span>Comunidade ModLive</span><div><button id="mic">🎙</button><button id="cam">📷</button><button id="share">▣ Compartilhar tela</button></div></header><section id="feed"><div id="welcome"><div class="hero">M</div><h1>Bem-vindo ao <em>ModLive</em></h1><p>Converse, faça chamadas e compartilhe sua tela em tempo real.</p></div><div id="videos"></div><div id="msgs"></div></section><form id="form"><button type="button">＋</button><input id="msg" placeholder="Conversar em #geral"><button>➤</button></form></main>
+<aside class="members"><h6>ONLINE — <span id="count">0</span></h6><div id="list"></div><hr><h6>MOD LIVE</h6><p>✓ Chat em tempo real</p><p>✓ Voz e vídeo WebRTC</p><p>✓ Compartilhamento de tela</p><p>✓ Login Google</p></aside></div>
+<script src="https://accounts.google.com/gsi/client" async defer></script><script src="/socket.io/socket.io.js"></script><script src="/app.js"></script></body></html>

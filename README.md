@@ -1,26 +1,18 @@
-# Mod Live Chat
+# ModLive 2.0
 
-Projeto de comunidade em tempo real com identidade **Mod Live Chat — Desde 2026**.
+## Render
+Build Command: `npm install`
 
-## Recursos desta versão
-- Canais de texto e interface de comunidade
-- Chat em tempo real com Socket.IO
-- Salas por ID
-- Voz e vídeo via WebRTC
-- Compartilhamento de tela do PC
-- Lista de participantes online
-- Interface responsiva
-- Logo oficial incluída em `public/assets/modlive-logo.jpeg`
+Start Command: `node server/server.js`
 
-## Executar
-1. Instale Node.js 18+.
-2. Abra o terminal na pasta do projeto.
-3. Execute `npm install`.
-4. Execute `npm start`.
-5. Abra `http://localhost:3000`.
+## Environment
+Adicione no Render:
+- `GOOGLE_CLIENT_ID` = seu OAuth Client ID do Google
+- `JWT_SECRET` = uma chave longa e aleatória
+- `NODE_ENV` = `production`
 
-## Colocar público
-Hospede em um serviço que aceite Node.js/WebSocket e use HTTPS. Para chamadas mais confiáveis entre redes diferentes, configure um servidor TURN (por exemplo, coturn) e adicione suas credenciais à configuração WebRTC.
+No Google Cloud Console, crie um OAuth 2.0 Client ID do tipo Web application e adicione `https://mod-live.onrender.com` em Authorized JavaScript origins.
 
-## Observação
-Esta é uma base funcional inspirada em apps de comunidade. Recursos de produção como contas persistentes, banco de dados, recuperação de senha, moderação avançada, armazenamento de arquivos e criptografia/segurança operacional precisam de infraestrutura adicional.
+O cadastro/login é obrigatório via Google. A recuperação da Conta Google é feita pelo próprio Google.
+
+Inclui chat Socket.IO, canais, usuários online, câmera/microfone WebRTC e compartilhamento de tela. Para WebRTC funcionar de forma confiável em todas as redes, futuramente é recomendado adicionar TURN.
